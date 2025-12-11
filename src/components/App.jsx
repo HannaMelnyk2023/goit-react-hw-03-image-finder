@@ -1,16 +1,79 @@
-export const App = () => {
-  return (
-    <div
-      style={{
-        height: '100vh',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        fontSize: 40,
-        color: '#010101'
-      }}
-    >
-      React homework template
-    </div>
-  );
-};
+import React, { Component } from 'react';
+import { Searchbar } from './Searchbar/Searchbar';
+import { ImageGallery } from './ImageGallery/ImageGallery';
+import { Button } from './Button/Button';
+import { Loader } from './Loader/Loader';
+import { Modal } from './Modal/Modal';
+const API_KEY = '52609803-933344cf37d0c6144f6fe0bf2';
+
+export class App extends Component {
+  state = {
+    image: [],
+    query: '',
+    page: 1,
+    isLoading: false,
+    largeImageURL: null,
+  };
+
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      prevState.query !== this.state.query ||
+      prevState.page !== this.state.page
+    ) {
+      this.fetchImage();
+    }
+  }
+  fetchImage = () => {
+    const { query, page } = this.state;
+    this.setState({ isLoading: true });
+    fetch(
+      `https://pixabay.com/api/?q=${query}&page=${page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
+    )
+      .then(res => res.json())
+      .then(data => {
+        this.setState(prev => ({
+          image: [...prev.image, ...data.hits],
+        }));
+      })
+      .finally(() => {
+        this.setState({
+          isLoading: false,
+        });
+      });
+  };
+  handleSearchSubmit = query => {
+    this.setState({
+      query,
+      page: 1,
+      image: [],
+    });
+  };
+  loadMore = () => {
+    this.setState(prev => ({
+      page: prev.page + 1,
+    }));
+  };
+  openModal = largeImageURL => {
+    this.setState({ largeImageURL });
+  };
+
+  closeModal = () => {
+    this.setState({ largeImageURL: null });
+  };
+
+  render() {
+    const { images, isLoading, largeImageURL } = this.state;
+
+    return (
+      <>
+        <Searchbar onSubmit={this.handleSearchSubmit} />
+        <ImageGallery images={images} onImageClick={this.openModal} />
+        {isLoading && <Loader />}
+        {images.length > 0 && !isLoading && <Button onClick={this.loadMore} />}
+        {largeImageURL && (
+          <Modal largeImageURL={largeImageURL} onClose={this.closeModal} />
+        )}
+      </>
+    );
+  }
+}
