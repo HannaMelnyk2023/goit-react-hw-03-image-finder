@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-
+import css from "./Searchbar.module.css";
 
 export class Searchbar extends Component{
     state = {
@@ -11,7 +11,7 @@ export class Searchbar extends Component{
     handleSubmit = (e) => {
         e.preventDefault();
         if (!this.state.value.trim()) {
-            alert("enter a word for search!");
+            alert("Enter a word for search!");
             return;
         }
         this.props.onSubmit(this.state.value);
@@ -19,13 +19,13 @@ export class Searchbar extends Component{
     };
     render() {
         return (
-            <header className="searchbar">
-                <form className="form" onSubmit={this.handleSubmit}>
-                    <button type="submit" className="button">
-                        <span className="button-label">Search</span>
+            <header className={css.searchbar}>
+                <form className={css.searchForm} onSubmit={this.handleSubmit}>
+                    <button type="submit" className={css.searchFormButton}>
+                        <span className={css.searchFormButtonLabel}>Search</span>
                     </button>
                     <input
-                        className="input"
+                        className={css.searchFormInput}
                         type="text"
                         value={this.state.value}
                         onChange={this.handleChange}

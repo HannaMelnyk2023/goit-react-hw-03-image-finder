@@ -4,6 +4,7 @@ import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Button } from './Button/Button';
 import { Loader } from './Loader/Loader';
 import { Modal } from './Modal/Modal';
+import css from "./App.module.css";
 
 const API_KEY = '52609803-933344cf37d0c6144f6fe0bf2';
 
