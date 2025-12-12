@@ -4,9 +4,9 @@ export class ImageGalleryItem extends Component {
     render() {
         const { webformatURL, largeImageURL, onClick } = this.props;
         return (
-            <li className="gallery-item"
+            <li className="imageGalleryItem"
                 onClick={() => onClick(largeImageURL)}>
-                <img src={webformatURL} alt="" />
+                <img className ="imageGalleryItem-image" src={webformatURL} alt="" />
             </li>
         );
     }

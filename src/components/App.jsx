@@ -4,11 +4,12 @@ import { ImageGallery } from './ImageGallery/ImageGallery';
 import { Button } from './Button/Button';
 import { Loader } from './Loader/Loader';
 import { Modal } from './Modal/Modal';
+
 const API_KEY = '52609803-933344cf37d0c6144f6fe0bf2';
 
 export class App extends Component {
   state = {
-    image: [],
+    images: [],
     query: '',
     page: 1,
     isLoading: false,
@@ -32,7 +33,7 @@ export class App extends Component {
       .then(res => res.json())
       .then(data => {
         this.setState(prev => ({
-          image: [...prev.image, ...data.hits],
+          images: [...prev.images, ...data.hits],
         }));
       })
       .finally(() => {
@@ -45,7 +46,7 @@ export class App extends Component {
     this.setState({
       query,
       page: 1,
-      image: [],
+      images: [],
     });
   };
   loadMore = () => {
