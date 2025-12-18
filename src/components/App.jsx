@@ -15,6 +15,8 @@ export class App extends Component {
     page: 1,
     isLoading: false,
     largeImageURL: null,
+    // додаємо властивість загальної кількості співпадінь:
+    totalHits: 0,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -33,8 +35,10 @@ export class App extends Component {
     )
       .then(res => res.json())
       .then(data => {
+        // console.log(data)
         this.setState(prev => ({
           images: [...prev.images, ...data.hits],
+          totalHits: data.totalHits,
         }));
       })
       .finally(() => {
@@ -64,14 +68,14 @@ export class App extends Component {
   };
 
   render() {
-    const { images, isLoading, largeImageURL } = this.state;
+    const { images, isLoading, largeImageURL, totalHits} = this.state;
 
     return (
       <>
         <Searchbar onSubmit={this.handleSearchSubmit} />
         <ImageGallery images={images} onImageClick={this.openModal} />
         {isLoading && <Loader />}
-        {images.length > 0 && !isLoading && <Button onClick={this.loadMore} />}
+        {images.length > 0 && images.length < totalHits && !isLoading && <Button onClick={this.loadMore} />}
         {largeImageURL && (
           <Modal largeImageURL={largeImageURL} onClose={this.closeModal} />
         )}
